@@ -1,0 +1,356 @@
+<div>
+  <div>
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between my-5">
+        <h2 class="text-center fw-bold heading">User Data</h2>
+
+        <button
+          class="btn btn-sm btn-outline-light"
+          (click)="create_data()"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-plus-lg"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+            />
+          </svg>
+          create
+        </button>
+      </div>
+      <h3 class=" text-light"> Pipe assignment , to convert todayIsGoodDay into "today Is Good Day"</h3>
+      <div class="text-light">{{ checkPipe | camelCase }}</div>
+      <!-- <button (click)="fun()">check</button> -->
+      <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content newModal">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Data</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div action id="editForm" class="m-auto">
+                <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                  <div class="mb-3">
+                    <label for="editName" class="form-label">Name</label>
+                    <input
+                      required
+                      type="text"
+                      name="name"
+                      formControlName="name"
+                      class="form-control bg-dark text-light"
+                      id="editName"
+                      aria-describedby="emailHelp"
+                    />
+                    <div
+                      *ngIf="
+                        this.userForm.get('name')?.hasError('required') &&
+                        showError
+                      "
+                      class="text-danger"
+                    >
+                      Name is required.
+                    </div>
+                    <div
+                      *ngIf="
+                        this.userForm.get('name')?.hasError('minlength') &&
+                        showError
+                      "
+                      class="text-danger"
+                    >
+                      Name minimum contain four letters.
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="editAge" class="form-label">age</label>
+                    <input
+                      required
+                      type="number"
+                      name="age"
+                      formControlName="age"
+                      class="form-control bg-dark text-light"
+                      id="editAge"
+                    />
+                    <div
+                      *ngIf="
+                        this.userForm.get('age')?.hasError('required') &&
+                        showError
+                      "
+                      class="text-danger"
+                    >
+                      Age is required.
+                    </div>
+                    <div
+                      *ngIf="
+                        this.userForm.get('age')?.hasError('max') && showError
+                      "
+                      class="text-danger"
+                    >
+                      Age must be less then 100.
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="editDescription" class="form-label"
+                      >Description</label
+                    >
+                    <input
+                      required
+                      type="text"
+                      name="description"
+                      formControlName="description"
+                      class="form-control bg-dark text-light"
+                      id="editDescription"
+                    />
+                    <div
+                      *ngIf="
+                        this.userForm
+                          .get('description')
+                          ?.hasError('required') && showError
+                      "
+                      class="text-danger"
+                    >
+                      Description is required.
+                    </div>
+                    <div
+                      *ngIf="
+                        this.userForm
+                          .get('description')
+                          ?.hasError('minlength') && showError
+                      "
+                      class="text-danger"
+                    >
+                      Description must be greater then 8 letter
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    id="submitBtn"
+                    class="btn btn-outline-light"
+                  >
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <table
+        class="table table-striped table-dark w-100 border-1 m-auto mt-5 userTable"
+      >
+        <thead>
+          <tr>
+            <th class="w-25">Name</th>
+            <th class="w-25">Age</th>
+            <th class="w-25">Description</th>
+            <th class="w-25 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of data; track item; let i = $index) {
+
+          <tr>
+            <td class="w-25 tableText">{{ item.name }}</td>
+            <td class="w-25 tableText">{{ item.age }}</td>
+            <td class="w-25 tableText">{{ item.description }}</td>
+            <td class="w-25 text-center">
+              <button
+                type="button"
+                class="btn btn-sm mx-1 btn-outline-light deleteBtn"
+                (click)="deleteRow(i)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-trash"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"
+                  />
+                  <path
+                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"
+                  />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-light editBtn"
+                (click)="editRow(i)"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-pencil"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"
+                  />
+                </svg>
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+
+      <div
+        *ngIf="show"
+        class="toast-container position-fixed bottom-0 end-0 p-3"
+      >
+        <div
+          class="toast show align-items-center text-bg-dark border-0"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div class="d-flex">
+            <div class="toast-body">
+              {{ toastMessage }}
+            </div>
+            <button
+              type="button"
+              class="btn-close btn-close-white me-2 m-auto"
+              (click)="show = false"
+              aria-label="Close"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-color-change></app-color-change>
+
+<!-- <app-template-driven-form /> -->
+
+<!--
+
+<div class="d-flex align-items-center justify-content-between">
+  <h2 class="text-center fw-bold m-4 heading">User Data</h2>
+  <button
+    class="btn btn-sm mx-1 btn-outline-danger"
+    class="btn btn-sm btn-outline-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+  >
+    create
+  </button>
+</div>
+<div class="mb-3">
+  <label for="name" class="form-label">Name</label>
+  <input required type="text" class="form-control" [(ngModel)]="name" />
+</div>
+<div class="mb-3">
+  <label for="age" class="form-label">age</label>
+  <input required type="number" class="form-control" [(ngModel)]="age" />
+</div>
+<div class="mb-3">
+  <label for="description" class="form-label">Description</label>
+  <input
+    required
+    type="text"
+    class="form-control"
+    [(ngModel)]="description"
+  />
+</div>
+
+<button type="submit" class="btn btn-primary" (click)="onSubmit()">
+  Submit
+</button> -->
+
+<!-- <div
+        class="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div action id="editForm" class="m-auto">
+                <div class="mb-3">
+                  <label for="editName" class="form-label">Name</label>
+                  <input
+                    required
+                    type="text"
+                    class="form-control"
+                    id="editName"
+                    aria-describedby="emailHelp"
+                    [(ngModel)]="edit_name"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="editAge" class="form-label">age</label>
+                  <input
+                    required
+                    type="number"
+                    class="form-control"
+                    id="editAge"
+                    [(ngModel)]="edit_age"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="editDescription" class="form-label"
+                    >Description</label
+                  >
+                  <input
+                    required
+                    type="text"
+                    class="form-control"
+                    id="editDescription"
+                    [(ngModel)]="edit_description"
+                  />
+                </div>
+
+                <button
+                  (click)="save_edit()"
+                  class="btn btn-primary"
+                  data-bs-dismiss="modal"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
